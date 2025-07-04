@@ -73,3 +73,22 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Unreal Engine 5 
+*.uasset
+*.umap
+*.fbx
+*.wav
+*.png
+
+Binaries/
+Saved/
+Intermediate/
+DerivedDataCache/
+
+# Visual Studio ve C++
+.vs/
+*.sln
+*.sdf
+*.opensdf
+*.VC.db
