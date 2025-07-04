@@ -6,6 +6,14 @@
 #include "GameFramework/Character.h"
 #include "RA_AchoCharacter.generated.h"
 
+
+class UInputMappingContext;
+class USpringArmComponent;
+class UCameraComponent;
+class UInputAction;
+struct FInputActionValue;
+class UGroomComponent;
+
 UCLASS()
 class RONAHIACHO_API ARA_AchoCharacter : public ACharacter
 {
@@ -20,7 +28,42 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	/** InputMappingContex */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputMappingContext* AchoInputMappingContex;
 
+	/** Move Input Action */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* MovementAction;
+
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* LookAction;
+	/** Jump Input Action */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* JumpAction;
+
+	/** Called for movement input */
+	void AchoMovement(const FInputActionValue& Value);
+
+	/** Called for looking input */
+	void AchoLook(const FInputActionValue& Value);
+
+	//GroomComponent Variable
+	UPROPERTY(VisibleAnywhere, Category = "GroomAsset")
+	UGroomComponent* AchoHair;
+
+	UPROPERTY(VisibleAnywhere, Category = "GroomAsset")
+	UGroomComponent* AchoAyebrows;
+
+
+private:
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* Camera;
 
 
 

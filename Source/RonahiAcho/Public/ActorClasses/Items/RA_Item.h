@@ -19,8 +19,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
-public:	
+private:
 
-
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* StaticMesh;
 
 };

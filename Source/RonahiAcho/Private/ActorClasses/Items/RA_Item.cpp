@@ -2,11 +2,18 @@
 
 
 #include "ActorClasses/Items/RA_Item.h"
+#include "Components/StaticMeshComponent.h"
+#include "RonahiAcho/DebugMacros.h"
 
 ARA_Item::ARA_Item()
 {
  	
 	PrimaryActorTick.bCanEverTick = true;
+
+	//Create StaticMeshComponent for Item.
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	RootComponent = StaticMesh;
+
 
 }
 
@@ -14,7 +21,7 @@ ARA_Item::ARA_Item()
 void ARA_Item::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 
