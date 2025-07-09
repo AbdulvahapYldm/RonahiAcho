@@ -12,6 +12,9 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
+#include "ActorClasses/Items/RA_Item.h"
+#include "ActorClasses/Items/Weapons/RA_Weapon.h"
+
 
 ARA_AchoCharacter::ARA_AchoCharacter()
 {
@@ -86,6 +89,9 @@ void ARA_AchoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
+		//EquipAction
+		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Started, this, &ARA_AchoCharacter::EKeyPressed);
+	
 	}
 
 }
@@ -116,4 +122,16 @@ void ARA_AchoCharacter::AchoLook(const FInputActionValue& Value)
 	// add yaw and pitch input to controller
 	AddControllerPitchInput(LookAxisValue.Y);
 	AddControllerYawInput(LookAxisValue.X);
+}
+
+void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
+{ 
+
+	ARA_Weapon* OverlapingWeapon = Cast<ARA_Weapon>(OverlapingItem);
+	if (OverlapingWeapon)
+	{
+		OverlapingWeapon->Equip(GetMesh(),FName("RightHandSocket"));
+		OverlapingItem = nullptr;
+	}
+	
 }

@@ -21,3 +21,15 @@
     DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, -1.f, 0, 1.f); \
     DrawDebugPoint(GetWorld(),EndLocation, 15.f, FColor::Green, false,-1.f); \
 };
+
+
+
+
+/*
+
+if (GEngine)
+{
+    GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString("E KeyPressed"));
+}
+
+*/
