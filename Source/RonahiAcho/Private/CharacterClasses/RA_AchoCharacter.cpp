@@ -11,9 +11,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-
 #include "ActorClasses/Items/RA_Item.h"
 #include "ActorClasses/Items/Weapons/RA_Weapon.h"
+
+
 
 
 ARA_AchoCharacter::ARA_AchoCharacter()
@@ -124,6 +125,9 @@ void ARA_AchoCharacter::AchoLook(const FInputActionValue& Value)
 	AddControllerYawInput(LookAxisValue.X);
 }
 
+
+
+
 void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
 { 
 
@@ -131,6 +135,7 @@ void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
 	if (OverlapingWeapon)
 	{
 		OverlapingWeapon->Equip(GetMesh(),FName("RightHandSocket"));
+		CharacterState = ECharacterState::ECS_EquipWeapon;
 		OverlapingItem = nullptr;
 	}
 	

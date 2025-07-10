@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "CharacterTypes.h"
 #include "RA_AchoCharacter.generated.h"
 
 
@@ -14,6 +15,8 @@ class UInputAction;
 struct FInputActionValue;
 class UGroomComponent;
 class ARA_Item;
+
+
 
 UCLASS()
 class RONAHIACHO_API ARA_AchoCharacter : public ACharacter
@@ -66,6 +69,8 @@ protected:
 
 private:
 
+	ECharacterState CharacterState = ECharacterState::ECS_UnEquiped;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;
 
@@ -79,7 +84,7 @@ private:
 
 public:
 
-	FORCEINLINE void SetOverlapingItem(ARA_Item* Item) { OverlapingItem = Item; };
-
+	FORCEINLINE void SetOverlapingItem(ARA_Item* Item) { OverlapingItem = Item; }
+	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
 
 };

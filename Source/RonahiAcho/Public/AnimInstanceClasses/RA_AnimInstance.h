@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "CharacterClasses/CharacterTypes.h"
 #include "RA_AnimInstance.generated.h"
 
 /**
@@ -36,4 +37,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = Movement)
 	bool IsFalling;
+
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
+	ECharacterState CharacterState;
 };

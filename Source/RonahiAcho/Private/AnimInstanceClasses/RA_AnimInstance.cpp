@@ -26,5 +26,6 @@ void URA_AnimInstance::NativeUpdateAnimation(float DeltaTime)
 	{
 		GroundSpeed = UKismetMathLibrary::VSizeXY(AchoCharacterMovement->Velocity);
 		IsFalling = AchoCharacterMovement->IsFalling();
+		CharacterState = AchoCharacter->GetCharacterState();
 	}
 }
