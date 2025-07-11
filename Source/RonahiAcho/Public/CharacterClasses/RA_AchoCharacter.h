@@ -33,21 +33,29 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	/** InputMappingContex */
+
+
+
+protected:
+
+	/** 
+	*  InputMappingContex
+	**/
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* AchoInputMappingContex;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* AchoFighting_IMC;
 
-	/** Move Input Action */
+	/** 
+	*  Acho Input Action
+	**/
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* MovementAction;
 
-	/** Look Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* LookAction;
-	/** Jump Input Action */
+
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* JumpAction;
 
@@ -57,19 +65,27 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* AttackAction;
 
-	/** Called for movement input */
+
+private:
+
+	/** 
+	*  Callback function for input
+	**/
 	void AchoMovement(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	void AchoLook(const FInputActionValue& Value);
-
-	/** Called for Equip E input */
 	void EKeyPressed(const FInputActionValue& Value);
-
-	/** Called for AttackAction input */
 	void RightMousePressed(const FInputActionValue& Value);
 
-	//GroomComponent Variable
+	/**
+	*  Play Montage Function
+	**/
+	void PlayAttackMontages();
+
+protected:
+
+	/**
+	*  GroomComponent Variables
+	**/
 	UPROPERTY(VisibleAnywhere, Category = "GroomAsset")
 	UGroomComponent* AchoHair;
 
@@ -80,6 +96,7 @@ protected:
 private:
 
 	ECharacterState CharacterState = ECharacterState::ECS_UnEquiped;
+	EActionState ActionState = EActionState::EAS_Unoccupied;
 	/*
 	Animation Montage 
 	*/
@@ -91,8 +108,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
-
-
 	
 	UPROPERTY(VisibleInstanceOnly)
 	ARA_Item* OverlapingItem;

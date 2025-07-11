@@ -78,24 +78,14 @@ void ARA_AchoCharacter::Tick(float DeltaTime)
 void ARA_AchoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	// Set up action bindings
+	// Set up action bindings for input
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
 
-
-		// Moving
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &ARA_AchoCharacter::AchoMovement);
-
-		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ARA_AchoCharacter::AchoLook);
-
-		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
-		//EquipAction
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Started, this, &ARA_AchoCharacter::EKeyPressed);
-		
-		//FightAction
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ARA_AchoCharacter::RightMousePressed);
 		
 	}
@@ -148,11 +138,21 @@ void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
 
 void ARA_AchoCharacter::RightMousePressed(const FInputActionValue& Value)
 {
+	if (ActionState == EActionState::EAS_Unoccupied)
+	{
+		PlayAttackMontages();
+		ActionState = EActionState::EAS_Attacking;
+	}
+
+}
+
+void ARA_AchoCharacter::PlayAttackMontages()
+{
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance&& AttackMontage)
+	if (AnimInstance && AttackMontage)
 	{
 		AnimInstance->Montage_Play(AttackMontage);
-		int32 AttackTypeSelection = FMath::RandRange(0, 1);
+		const int32 AttackTypeSelection = FMath::RandRange(0, 1);
 		FName SectionName = FName();
 
 		switch (AttackTypeSelection)
