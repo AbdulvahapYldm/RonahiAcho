@@ -15,6 +15,7 @@ class UInputAction;
 struct FInputActionValue;
 class UGroomComponent;
 class ARA_Item;
+class UAnimMontage;
 
 
 
@@ -36,6 +37,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* AchoInputMappingContex;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputMappingContext* AchoFighting_IMC;
+
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* MovementAction;
@@ -50,6 +54,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* EquipAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* AttackAction;
+
 	/** Called for movement input */
 	void AchoMovement(const FInputActionValue& Value);
 
@@ -58,6 +65,9 @@ protected:
 
 	/** Called for Equip E input */
 	void EKeyPressed(const FInputActionValue& Value);
+
+	/** Called for AttackAction input */
+	void RightMousePressed(const FInputActionValue& Value);
 
 	//GroomComponent Variable
 	UPROPERTY(VisibleAnywhere, Category = "GroomAsset")
@@ -70,6 +80,11 @@ protected:
 private:
 
 	ECharacterState CharacterState = ECharacterState::ECS_UnEquiped;
+	/*
+	Animation Montage 
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = "Montages")
+	UAnimMontage* AttackMontage;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;

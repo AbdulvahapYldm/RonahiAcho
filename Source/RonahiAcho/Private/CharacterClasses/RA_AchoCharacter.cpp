@@ -13,6 +13,7 @@
 #include "InputActionValue.h"
 #include "ActorClasses/Items/RA_Item.h"
 #include "ActorClasses/Items/Weapons/RA_Weapon.h"
+#include "Animation/AnimMontage.h"
 
 
 
@@ -61,6 +62,7 @@ void ARA_AchoCharacter::BeginPlay()
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(AchoInputMappingContex, 0);
+			Subsystem->AddMappingContext(AchoFighting_IMC, 0);
 		}
 	}
 }
@@ -92,7 +94,10 @@ void ARA_AchoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		//EquipAction
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Started, this, &ARA_AchoCharacter::EKeyPressed);
-	
+		
+		//FightAction
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ARA_AchoCharacter::RightMousePressed);
+		
 	}
 
 }
@@ -130,7 +135,7 @@ void ARA_AchoCharacter::AchoLook(const FInputActionValue& Value)
 
 void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
 { 
-
+	
 	ARA_Weapon* OverlapingWeapon = Cast<ARA_Weapon>(OverlapingItem);
 	if (OverlapingWeapon)
 	{
@@ -139,4 +144,29 @@ void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
 		OverlapingItem = nullptr;
 	}
 	
+}
+
+void ARA_AchoCharacter::RightMousePressed(const FInputActionValue& Value)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance&& AttackMontage)
+	{
+		AnimInstance->Montage_Play(AttackMontage);
+		int32 AttackTypeSelection = FMath::RandRange(0, 1);
+		FName SectionName = FName();
+
+		switch (AttackTypeSelection)
+		{
+
+		case 0:
+			SectionName = FName("Attack_01");
+			break;
+		case 1:
+			SectionName = FName("Attack_02");
+			break;
+		default:
+			break;
+		}
+		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
+	}
 }
