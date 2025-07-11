@@ -18,6 +18,7 @@
 
 
 
+
 ARA_AchoCharacter::ARA_AchoCharacter()
 {
  
@@ -94,9 +95,11 @@ void ARA_AchoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void ARA_AchoCharacter::AchoMovement(const FInputActionValue& Value)
 {
+	if (ActionState == EActionState::EAS_Attacking) return;
+	
 	// input is a Vector2D
 	const FVector2D MovementValue = Value.Get<FVector2D>();
-
+	
 	// Find out which way is forward
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -108,11 +111,14 @@ void ARA_AchoCharacter::AchoMovement(const FInputActionValue& Value)
 
 	// Add movement 
 	AddMovementInput(ForwardDirection, MovementValue.Y);
-	AddMovementInput(RightDirection, MovementValue.X);
+	AddMovementInput(RightDirection, MovementValue.X);	
+
+
 }
 
 void ARA_AchoCharacter::AchoLook(const FInputActionValue& Value)
 {
+
 	const FVector2D LookAxisValue = Value.Get<FVector2D>();
 
 	// add yaw and pitch input to controller
@@ -132,17 +138,37 @@ void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
 		OverlapingWeapon->Equip(GetMesh(),FName("RightHandSocket"));
 		CharacterState = ECharacterState::ECS_EquipWeapon;
 		OverlapingItem = nullptr;
+		EquipedWeapon = OverlapingWeapon;
+		
 	}
-	
+	else
+	{
+		if (bCanDisarm())
+		{
+			PlayEquipMontage(FName("UnEquip"));
+			CharacterState = ECharacterState::ECS_UnEquiped;
+		}
+		else if (bCanArm()) 
+		{
+			PlayEquipMontage(FName("Equip"));
+			CharacterState = ECharacterState::ECS_EquipWeapon;
+		}
+	}
+
 }
+
+
+
 
 void ARA_AchoCharacter::RightMousePressed(const FInputActionValue& Value)
 {
-	if (ActionState == EActionState::EAS_Unoccupied)
+
+	if (CanAttack())
 	{
 		PlayAttackMontages();
 		ActionState = EActionState::EAS_Attacking;
 	}
+	
 
 }
 
@@ -169,4 +195,36 @@ void ARA_AchoCharacter::PlayAttackMontages()
 		}
 		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
 	}
+}
+void ARA_AchoCharacter::PlayEquipMontage(FName SectionName)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && EquipMontage)
+	{
+		AnimInstance->Montage_Play(EquipMontage);
+		AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
+	}
+}
+
+bool ARA_AchoCharacter::CanAttack()
+{
+	return ActionState == EActionState::EAS_Unoccupied &&
+		CharacterState != ECharacterState::ECS_UnEquiped;
+}
+
+void ARA_AchoCharacter::EndAttack()
+{
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
+bool ARA_AchoCharacter::bCanDisarm()
+{
+	return ActionState == EActionState::EAS_Unoccupied && 
+		CharacterState != ECharacterState::ECS_UnEquiped ;
+}
+
+bool ARA_AchoCharacter::bCanArm()
+{
+	return ActionState == EActionState::EAS_Unoccupied&& 
+		CharacterState == ECharacterState::ECS_UnEquiped&& EquipedWeapon;
 }

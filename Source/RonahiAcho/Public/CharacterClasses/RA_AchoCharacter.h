@@ -16,6 +16,7 @@ struct FInputActionValue;
 class UGroomComponent;
 class ARA_Item;
 class UAnimMontage;
+class ARA_Weapon;
 
 
 
@@ -65,8 +66,19 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* AttackAction;
 
+	/**
+	*  Play Montage Function
+	**/
+	void PlayAttackMontages();
+	bool CanAttack();
+	bool bCanDisarm();
+	bool bCanArm();
+	void PlayEquipMontage(FName SectionName);
 
-private:
+	UFUNCTION(BlueprintCallable)
+	void EndAttack();
+	
+
 
 	/** 
 	*  Callback function for input
@@ -76,10 +88,7 @@ private:
 	void EKeyPressed(const FInputActionValue& Value);
 	void RightMousePressed(const FInputActionValue& Value);
 
-	/**
-	*  Play Montage Function
-	**/
-	void PlayAttackMontages();
+
 
 protected:
 
@@ -93,15 +102,27 @@ protected:
 	UGroomComponent* AchoAyebrows;
 
 
+
+
+
 private:
 
 	ECharacterState CharacterState = ECharacterState::ECS_UnEquiped;
 	EActionState ActionState = EActionState::EAS_Unoccupied;
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	ARA_Weapon* EquipedWeapon;
+
 	/*
 	Animation Montage 
 	*/
 	UPROPERTY(EditDefaultsOnly, Category = "Montages")
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Montages")
+	UAnimMontage* EquipMontage;
+	
+
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;
