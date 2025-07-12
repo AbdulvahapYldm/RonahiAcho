@@ -77,7 +77,16 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void EndAttack();
-	
+
+	UFUNCTION(BlueprintCallable)
+	void DisArm();
+
+	UFUNCTION(BlueprintCallable)
+	void Arm();
+
+	UFUNCTION(BlueprintCallable)
+	void FinishEquipment();
+
 
 
 	/** 

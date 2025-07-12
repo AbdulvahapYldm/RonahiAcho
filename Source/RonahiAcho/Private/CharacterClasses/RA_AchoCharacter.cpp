@@ -95,7 +95,7 @@ void ARA_AchoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void ARA_AchoCharacter::AchoMovement(const FInputActionValue& Value)
 {
-	if (ActionState == EActionState::EAS_Attacking) return;
+	if (ActionState != EActionState::EAS_Unoccupied) return;
 	
 	// input is a Vector2D
 	const FVector2D MovementValue = Value.Get<FVector2D>();
@@ -147,11 +147,13 @@ void ARA_AchoCharacter::EKeyPressed(const FInputActionValue& Value)
 		{
 			PlayEquipMontage(FName("UnEquip"));
 			CharacterState = ECharacterState::ECS_UnEquiped;
+			ActionState = EActionState::EAS_EquipingWeapon;
 		}
 		else if (bCanArm()) 
 		{
 			PlayEquipMontage(FName("Equip"));
 			CharacterState = ECharacterState::ECS_EquipWeapon;
+			ActionState = EActionState::EAS_EquipingWeapon;
 		}
 	}
 
@@ -213,6 +215,27 @@ bool ARA_AchoCharacter::CanAttack()
 }
 
 void ARA_AchoCharacter::EndAttack()
+{
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void ARA_AchoCharacter::DisArm()
+{
+	if (EquipedWeapon)
+	{
+		EquipedWeapon->AttachMeshToSocket(GetMesh(), FName("SpineSocket"));
+	}
+}
+
+void ARA_AchoCharacter::Arm()
+{
+	if (EquipedWeapon)
+	{
+		EquipedWeapon->AttachMeshToSocket(GetMesh(), FName("RightHandSocket"));
+	}
+}
+
+void ARA_AchoCharacter::FinishEquipment()
 {
 	ActionState = EActionState::EAS_Unoccupied;
 }

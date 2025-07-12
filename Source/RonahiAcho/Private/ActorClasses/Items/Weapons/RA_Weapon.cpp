@@ -23,7 +23,12 @@ void ARA_Weapon::EndSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 
 void ARA_Weapon::Equip(USceneComponent* InParent, FName SocketName)
 {
+	AttachMeshToSocket(InParent, SocketName);
+	
+}
+
+void ARA_Weapon::AttachMeshToSocket(USceneComponent* InParent, const FName& SocketName)
+{
 	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
 	StaticMesh->AttachToComponent(InParent, TransformRules, SocketName);
-
 }
